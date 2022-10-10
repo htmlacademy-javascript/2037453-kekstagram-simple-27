@@ -38,6 +38,6 @@ const generatePhotoDetails = (i) => ({
   comments: myRandom(0, 200),
 });
 
-const photoDetails = Array.from({length: 25}, (a, i) => generatePhotoDetails(i));
+const photoDetails = Array.from({length: 25}, (a, i) => generatePhotoDetails(i + 1));
 
 console.log(photoDetails);
