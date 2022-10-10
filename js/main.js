@@ -19,30 +19,24 @@ const sentences = [
   'Fusce efficitur nunc nec erat ullamcorper, at mattis lectus feugiat.'
 ];
 
-const myRandom = (min, max) => {
-  return Math.floor(min + Math.random() * (max + 1 - min));
-};
+const myRandom = (min, max) => Math.floor(min + Math.random() * (max + 1 - min));
 
-const maxLength = (str, max) => {
-  return str.length <= max;
-};
+const maxLength = (str, max) => str.length <= max;
 
 const generateRandomDescription = () => {
-  const n = myRandom(1, 4)
+  const n = myRandom(1, 4);
   return Array
     .from({length: n}, () => sentences[myRandom(0, sentences.length - 1)])
-    .join(' ')
+    .join(' ');
 };
 
-const generatePhotoDetails = (i) => {
-  return {
-    id: i,
-    url: `photos/${i}.jpg`,
-    description: generateRandomDescription(),
-    likes: myRandom(15, 200),
-    comments: myRandom(0, 200),
-  };
-};
+const generatePhotoDetails = (i) => ({
+  id: i,
+  url: `photos/${i}.jpg`,
+  description: generateRandomDescription(),
+  likes: myRandom(15, 200),
+  comments: myRandom(0, 200),
+});
 
 const photoDetails = Array.from({length: 25}, (a, i) => generatePhotoDetails(i));
 
