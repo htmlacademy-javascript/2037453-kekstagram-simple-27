@@ -1,11 +1,15 @@
-const ThumbRender = function(template, item) {
+const ThumbRender = function (template, {
+  url = 'no-photo.jpg',
+  likes = 0,
+  comments = 0
+}) {
   const newPost = template.cloneNode(true);
-  const picture = newPost.querySelector('.picture__img');
-  picture.src = item?.url || 'no-photo.jpg';
-  const likes = newPost.querySelector('.picture__likes');
-  likes.textContent = item?.likes || '0';
-  const comments = newPost.querySelector('.picture__comments');
-  comments.textContent = item?.comments || '0';
+  const newPostPicture = newPost.querySelector('.picture__img');
+  newPostPicture.src = url;
+  const newPostLikes = newPost.querySelector('.picture__likes');
+  newPostLikes.textContent = String(likes);
+  const newPostLikesComments = newPost.querySelector('.picture__comments');
+  newPostLikesComments.textContent = String(comments);
   return newPost;
 };
 
