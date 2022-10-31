@@ -85,9 +85,8 @@ const ImgEditor = {
         ImgEditor.imgPreview.style.filter = `${ImgEditor.currentImgEffect.name}(${val[0]}${ImgEditor.currentImgEffect.unit})`;
       });
       ImgEditor.imgAddEffectHandler.on('change', (val) => {
-        const fractionalSize = Number.isInteger(ImgEditor.currentImgEffect.step)
-          ? 0
-          : 1;
+        // Интересная идея с приведением типов. Превращаем true/false в 1/0
+        const fractionalSize = Number(Number.isInteger(ImgEditor.currentImgEffect.step))
         ImgEditor.imgEffectValue.value = Number(val).toFixed(fractionalSize);
       });
     }
