@@ -86,7 +86,7 @@ const ImgEditor = {
       });
       ImgEditor.imgAddEffectHandler.on('change', (val) => {
         // Интересная идея с приведением типов. Превращаем true/false в 1/0
-        const fractionalSize = Number(Number.isInteger(ImgEditor.currentImgEffect.step))
+        const fractionalSize = Number(Number.isInteger(ImgEditor.currentImgEffect.step));
         ImgEditor.imgEffectValue.value = Number(val).toFixed(fractionalSize);
       });
     }
