@@ -73,6 +73,7 @@ const ImgEditor = {
       ImgEditor.currentImgEffect = ImgEditor.imgEffects[effect];
       ImgEditor.imgPreview.classList.add(`effects__preview--${effect}`);
       ImgEditor.imgAddEffectHandler = noUiSlider.create(ImgEditor.fileForm.querySelector('#img-effect-level'), {
+        connect: 'lower',
         start: ImgEditor.currentImgEffect.max,
         range: {
           'min': ImgEditor.currentImgEffect.min,
@@ -84,7 +85,10 @@ const ImgEditor = {
         ImgEditor.imgPreview.style.filter = `${ImgEditor.currentImgEffect.name}(${val[0]}${ImgEditor.currentImgEffect.unit})`;
       });
       ImgEditor.imgAddEffectHandler.on('change', (val) => {
-        ImgEditor.imgEffectValue.value = val;
+        const fractionalSize = Number.isInteger(ImgEditor.currentImgEffect.step)
+          ? 0
+          : 1;
+        ImgEditor.imgEffectValue.value = Number(val).toFixed(fractionalSize);
       });
     }
   },
