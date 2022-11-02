@@ -1,48 +1,14 @@
 // Всем необходимым элементам добавил id,
 // потому что у меня бзик - классы для стилей, id (иногда data) для скриптов,
 // теги - зло :)
+import {IMG_PARAMS} from './settings.js';
+
 const ImgEditor = {
-  imgScale: 1,
-  imgScaleMin: .25,
-  imgScaleMax: 1,
-  imgScaleStep: .25,
-  imgEffects: {
-    chrome: {
-      name: 'grayscale',
-      min: 0,
-      max: 1,
-      step: .1,
-      unit: '',
-    },
-    sepia: {
-      name: 'sepia',
-      min: 0,
-      max: 1,
-      step: .1,
-      unit: '',
-    },
-    marvin: {
-      name: 'invert',
-      min: 0,
-      max: 100,
-      step: 1,
-      unit: '%',
-    },
-    phobos: {
-      name: 'blur',
-      min: 0,
-      max: 3,
-      step: .1,
-      unit: 'px',
-    },
-    heat: {
-      name: 'brightness',
-      min: 1,
-      max: 3,
-      step: .1,
-      unit: '',
-    },
-  },
+  imgScale: IMG_PARAMS.imgScale,
+  imgScaleMin: IMG_PARAMS.imgScaleMin,
+  imgScaleMax: IMG_PARAMS.imgScaleMax,
+  imgScaleStep: IMG_PARAMS.imgScaleStep,
+  imgEffects: IMG_PARAMS.imgEffects,
   init() {
     this.fileForm = document.querySelector('#upload-select-image');
     this.fileUpload = this.fileForm.querySelector('#upload-file');
@@ -103,6 +69,8 @@ const ImgEditor = {
   resetImgChanges() {
     this.imgScale = 1;
     this.fileUpload.value = null;
+    this.imgAddEffect.removeEventListener('change', this.setImgEffect);
+    this.imgScaleHandler.removeEventListener('click', this.setImgScale);
     this.clearImgEffect();
   },
   showImgEditor() {
