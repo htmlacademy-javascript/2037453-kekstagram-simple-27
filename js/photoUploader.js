@@ -103,6 +103,8 @@ const ImgEditor = {
   resetImgChanges() {
     this.imgScale = 1;
     this.fileUpload.value = null;
+    this.imgAddEffect.removeEventListener('change', this.setImgEffect);
+    this.imgScaleHandler.removeEventListener('click', this.setImgScale);
     this.clearImgEffect();
   },
   showImgEditor() {
