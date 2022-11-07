@@ -1,5 +1,6 @@
 import {ThumbRender} from './thumbRender.js';
 import {Posts} from './data.js';
+import {ImgEditor} from './photoUploader.js';
 
 const fragment = new DocumentFragment();
 const template = document.querySelector('#picture').content;
@@ -10,3 +11,4 @@ Posts.forEach((el) => {
 
 container.appendChild(fragment);
 
+ImgEditor.init();
