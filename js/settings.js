@@ -21,4 +21,6 @@ const SENTENCES = [
 
 const POST_COUNT = 25;
 
-export {SENTENCES, POST_COUNT};
+const DOWNLOAD_URL = 'https://27.javascript.pages.academy/kekstagram-simple/data';
+
+export {SENTENCES, POST_COUNT, DOWNLOAD_URL};
