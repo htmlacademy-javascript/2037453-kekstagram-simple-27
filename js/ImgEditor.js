@@ -1,7 +1,7 @@
 // Всем необходимым элементам добавил id,
 // потому что у меня бзик - классы для стилей, id (иногда data) для скриптов,
 // теги - зло :)
-import {IMG_PARAMS} from './settings.js';
+import {IMG_PARAMS, FILE_TYPES} from './settings.js';
 
 const ImgEditor = {
   imgScale: IMG_PARAMS.imgScale,
@@ -23,6 +23,7 @@ const ImgEditor = {
   },
   reset() {
     this.imgEditor.classList.add('hidden');
+    ImgEditor.imgPreview.src = 'img/upload-default-image.jpg';
     this.resetImgChanges();
     this.uploadCancel.removeEventListener('click', ImgEditor.hideImgEditor);
     window.removeEventListener('keyup', ImgEditor.hideImgEditor);
@@ -82,12 +83,18 @@ const ImgEditor = {
   showImgEditor() {
     // Пока не придумал, как обойти потерю окружения,
     // при этом сохранить оригинал функции, а не копию, которую дает bind.
-    ImgEditor.setImgScale();
-    ImgEditor.uploadCancel.addEventListener('click', ImgEditor.hideImgEditor);
-    ImgEditor.imgAddEffect.addEventListener('change', ImgEditor.setImgEffect);
-    ImgEditor.imgScaleHandler.addEventListener('click', ImgEditor.setImgScale);
-    window.addEventListener('keyup', ImgEditor.hideImgEditor);
-    ImgEditor.imgEditor.classList.remove('hidden');
+    const file = ImgEditor.fileUpload.files[0];
+    const fileName = file.name.toLowerCase();
+    const matches = FILE_TYPES.some((el) => fileName.endsWith(el));
+    if(matches) {
+      ImgEditor.imgPreview.src = URL.createObjectURL(file);
+      ImgEditor.setImgScale();
+      ImgEditor.uploadCancel.addEventListener('click', ImgEditor.hideImgEditor);
+      ImgEditor.imgAddEffect.addEventListener('change', ImgEditor.setImgEffect);
+      ImgEditor.imgScaleHandler.addEventListener('click', ImgEditor.setImgScale);
+      window.addEventListener('keyup', ImgEditor.hideImgEditor);
+      ImgEditor.imgEditor.classList.remove('hidden');
+    }
   },
   hideImgEditor(evt) {
     // Хоть я и придерживаюсь числового кода нажатых клавиш
