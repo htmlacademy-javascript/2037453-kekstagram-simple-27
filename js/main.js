@@ -1,5 +1,5 @@
-import {DownloadPhoto} from './dataLoader.js';
-import {ImgEditor} from './photoUploader.js';
+import {ImgDownload} from './ImgDownload.js';
+import {ImgUpload} from './ImgUpload.js';
 
-DownloadPhoto();
-ImgEditor.init();
+ImgDownload();
+ImgUpload();

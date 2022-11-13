@@ -23,6 +23,8 @@ const POST_COUNT = 25;
 
 const DOWNLOAD_URL = 'https://27.javascript.pages.academy/kekstagram-simple/data';
 
+const UPLOAD_URL = 'https://27.javascript.pages.academy/kekstagram-simple';
+
 const IMG_PARAMS = {
   imgScale: 1,
   imgScaleMin: .25,
@@ -67,5 +69,5 @@ const IMG_PARAMS = {
   },
 };
 
-export {SENTENCES, POST_COUNT, DOWNLOAD_URL, IMG_PARAMS};
+export {SENTENCES, POST_COUNT, DOWNLOAD_URL, UPLOAD_URL, IMG_PARAMS};
 

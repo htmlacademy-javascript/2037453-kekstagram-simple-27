@@ -21,6 +21,12 @@ const ImgEditor = {
     this.imgScaleValue = this.imgScaleHandler.querySelector('#img-scale-value');
     this.fileUpload.addEventListener('change', this.showImgEditor);
   },
+  reset() {
+    this.imgEditor.classList.add('hidden');
+    this.resetImgChanges();
+    this.uploadCancel.removeEventListener('click', ImgEditor.hideImgEditor);
+    window.removeEventListener('keyup', ImgEditor.hideImgEditor);
+  },
   setImgScale(evt) {
     if (evt?.target.classList.contains('scale__control--smaller')) {
       ImgEditor.imgScale -= ImgEditor.imgScaleStep;
@@ -86,9 +92,7 @@ const ImgEditor = {
   hideImgEditor(evt) {
     // Хоть я и придерживаюсь числового кода нажатых клавиш
     if (evt?.key === 'Escape' || evt?.type === 'click') {
-      ImgEditor.imgEditor.classList.add('hidden');
-      ImgEditor.resetImgChanges();
-      evt.currentTarget.removeEventListener(evt.type, ImgEditor.hideImgEditor);
+      ImgEditor.reset();
     }
   },
 };
