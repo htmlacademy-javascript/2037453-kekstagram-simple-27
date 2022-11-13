@@ -710,6 +710,18 @@ main {
   border-radius: 5px;
 }
 
+.pristine-error {
+  font-weight: 600;
+  color: #f00;
+}
+
+.has-danger .text__description {
+  box-shadow: 0 0 5px 3px #f00;
+}
+
+.has-success .text__description {
+  box-shadow: 0 0 5px 3px #0f0;
+}
 
 /**
   * Кнопка для отправки изображения

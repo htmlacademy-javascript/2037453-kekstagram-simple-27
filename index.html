@@ -25,11 +25,12 @@
               action="https://27.javascript.pages.academy/kekstagram-simple"
               method="post"
               enctype="multipart/form-data"
-              autocomplete="off">
+              autocomplete="off"
+              novalidate>
 
           <!-- Изначальное состояние поля для загрузки изображения -->
           <fieldset class="img-upload__start">
-            <input type="file" id="upload-file" class="img-upload__input  visually-hidden" name="filename" required>
+            <input type="file" id="upload-file" class="img-upload__input  visually-hidden" name="filename"  accept="image/png, image/jpeg" required>
             <label for="upload-file" class="img-upload__label  img-upload__control">Загрузить</label>
           </fieldset>
 
@@ -121,8 +122,21 @@
 
               <!-- Добавление комментария к изображению -->
               <fieldset class="img-upload__text text">
-                <textarea class="text__description" name="description" placeholder="Ваш комментарий..." required
-                          minlength="20" maxlength="140"></textarea>
+                <div class="form-group">
+                  <label for="text-description"></label>
+                  <textarea
+                      id="text-description"
+                      class="text__description"
+                      name="description"
+                      placeholder="Ваш комментарий..."
+                      required
+                      data-pristine-minlength="20"
+                      data-pristine-maxlength="140"
+                      data-pristine-required-message="Поле не может быть пустым"
+                      data-pristine-minlength-message="Сообщение должно быть не менее 20 символов"
+                      data-pristine-maxlength-message="Сообщение должно быть не более 140 символов"
+                  ></textarea>
+                </div>
               </fieldset>
 
               <!-- Кнопка для отправки данных на сервер -->
@@ -185,6 +199,7 @@
 </template>
 
 <script src="vendor/nouislider/nouislider.js"></script>
+<script src="vendor/pristine/pristine.min.js"></script>
 <script src="js/main.js" type="module"></script>
 
 </body>
