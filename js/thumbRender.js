@@ -1,4 +1,4 @@
-const ThumbRender = function (template, {
+const thumbRender = function (template, {
   url = 'no-photo.jpg',
   likes = 0,
   comments = 0,
@@ -16,5 +16,4 @@ const ThumbRender = function (template, {
   newPostLikesComments.textContent = String(comments);
   return newPost;
 };
-
-export {ThumbRender};
+export {thumbRender};

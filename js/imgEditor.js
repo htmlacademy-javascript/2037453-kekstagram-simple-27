@@ -1,9 +1,8 @@
 // Всем необходимым элементам добавил id,
 // потому что у меня бзик - классы для стилей, id (иногда data) для скриптов,
 // теги - зло :)
-import {IMG_PARAMS} from './settings.js';
-
-const ImgEditor = {
+import {IMG_PARAMS, FILE_TYPES} from './settings.js';
+const imgEditor = {
   imgScale: IMG_PARAMS.imgScale,
   imgScaleMin: IMG_PARAMS.imgScaleMin,
   imgScaleMax: IMG_PARAMS.imgScaleMax,
@@ -21,39 +20,46 @@ const ImgEditor = {
     this.imgScaleValue = this.imgScaleHandler.querySelector('#img-scale-value');
     this.fileUpload.addEventListener('change', this.showImgEditor);
   },
+  reset() {
+    this.imgEditor.classList.add('hidden');
+    imgEditor.imgPreview.src = 'img/upload-default-image.jpg';
+    this.resetImgChanges();
+    this.uploadCancel.removeEventListener('click', imgEditor.hideImgEditor);
+    window.removeEventListener('keyup', imgEditor.hideImgEditor);
+  },
   setImgScale(evt) {
     if (evt?.target.classList.contains('scale__control--smaller')) {
-      ImgEditor.imgScale -= ImgEditor.imgScaleStep;
+      imgEditor.imgScale -= imgEditor.imgScaleStep;
     }
     if (evt?.target.classList.contains('scale__control--bigger')) {
-      ImgEditor.imgScale += ImgEditor.imgScaleStep;
+      imgEditor.imgScale += imgEditor.imgScaleStep;
     }
-    ImgEditor.imgScale = Math.max(Math.min(ImgEditor.imgScale, ImgEditor.imgScaleMax), ImgEditor.imgScaleMin);
-    ImgEditor.imgScaleValue.value = `${ImgEditor.imgScale * 100}%`;
-    ImgEditor.imgPreview.style.transform = `scale(${ImgEditor.imgScale})`;
+    imgEditor.imgScale = Math.max(Math.min(imgEditor.imgScale, imgEditor.imgScaleMax), imgEditor.imgScaleMin);
+    imgEditor.imgScaleValue.value = `${imgEditor.imgScale * 100}%`;
+    imgEditor.imgPreview.style.transform = `scale(${imgEditor.imgScale})`;
   },
   setImgEffect(evt) {
-    ImgEditor.clearImgEffect();
+    imgEditor.clearImgEffect();
     const effect = evt?.target.value;
-    if (ImgEditor.imgEffects?.[effect]) {
-      ImgEditor.currentImgEffect = ImgEditor.imgEffects[effect];
-      ImgEditor.imgPreview.classList.add(`effects__preview--${effect}`);
-      ImgEditor.imgAddEffectHandler = noUiSlider.create(ImgEditor.fileForm.querySelector('#img-effect-level'), {
+    if (imgEditor.imgEffects?.[effect]) {
+      imgEditor.currentImgEffect = imgEditor.imgEffects[effect];
+      imgEditor.imgPreview.classList.add(`effects__preview--${effect}`);
+      imgEditor.imgAddEffectHandler = noUiSlider.create(imgEditor.fileForm.querySelector('#img-effect-level'), {
         connect: 'lower',
-        start: ImgEditor.currentImgEffect.max,
+        start: imgEditor.currentImgEffect.max,
         range: {
-          'min': ImgEditor.currentImgEffect.min,
-          'max': ImgEditor.currentImgEffect.max,
+          'min': imgEditor.currentImgEffect.min,
+          'max': imgEditor.currentImgEffect.max,
         },
-        step: ImgEditor.currentImgEffect.step,
+        step: imgEditor.currentImgEffect.step,
       });
-      ImgEditor.imgAddEffectHandler.on('update', (val) => {
-        ImgEditor.imgPreview.style.filter = `${ImgEditor.currentImgEffect.name}(${val[0]}${ImgEditor.currentImgEffect.unit})`;
+      imgEditor.imgAddEffectHandler.on('update', (val) => {
+        imgEditor.imgPreview.style.filter = `${imgEditor.currentImgEffect.name}(${val[0]}${imgEditor.currentImgEffect.unit})`;
       });
-      ImgEditor.imgAddEffectHandler.on('change', (val) => {
-        // Интересная идея с приведением типов. Превращаем true/false в 1/0
-        const fractionalSize = Number(Number.isInteger(ImgEditor.currentImgEffect.step));
-        ImgEditor.imgEffectValue.value = Number(val).toFixed(fractionalSize);
+      imgEditor.imgAddEffectHandler.on('change', (val) => {
+        // Превращаем true/false в 1/0
+        const fractionalSize = Number(Number.isInteger(imgEditor.currentImgEffect.step));
+        imgEditor.imgEffectValue.value = Number(val).toFixed(fractionalSize);
       });
     }
   },
@@ -76,21 +82,24 @@ const ImgEditor = {
   showImgEditor() {
     // Пока не придумал, как обойти потерю окружения,
     // при этом сохранить оригинал функции, а не копию, которую дает bind.
-    ImgEditor.setImgScale();
-    ImgEditor.uploadCancel.addEventListener('click', ImgEditor.hideImgEditor);
-    ImgEditor.imgAddEffect.addEventListener('change', ImgEditor.setImgEffect);
-    ImgEditor.imgScaleHandler.addEventListener('click', ImgEditor.setImgScale);
-    window.addEventListener('keyup', ImgEditor.hideImgEditor);
-    ImgEditor.imgEditor.classList.remove('hidden');
+    const file = imgEditor.fileUpload.files[0];
+    const fileName = file.name.toLowerCase();
+    const matches = FILE_TYPES.some((el) => fileName.endsWith(el));
+    if(matches) {
+      imgEditor.imgPreview.src = URL.createObjectURL(file);
+      imgEditor.setImgScale();
+      imgEditor.uploadCancel.addEventListener('click', imgEditor.hideImgEditor);
+      imgEditor.imgAddEffect.addEventListener('change', imgEditor.setImgEffect);
+      imgEditor.imgScaleHandler.addEventListener('click', imgEditor.setImgScale);
+      imgEditor.imgEditor.classList.remove('hidden');
+      window.addEventListener('keyup', imgEditor.hideImgEditor);
+    }
   },
   hideImgEditor(evt) {
     // Хоть я и придерживаюсь числового кода нажатых клавиш
     if (evt?.key === 'Escape' || evt?.type === 'click') {
-      ImgEditor.imgEditor.classList.add('hidden');
-      ImgEditor.resetImgChanges();
-      evt.currentTarget.removeEventListener(evt.type, ImgEditor.hideImgEditor);
+      imgEditor.reset();
     }
   },
 };
-
-export {ImgEditor};
+export {imgEditor};

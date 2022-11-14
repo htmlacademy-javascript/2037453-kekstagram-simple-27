@@ -1,20 +1,16 @@
 import {UPLOAD_URL} from './settings.js';
-import {ModalHandler} from './util.js';
-import {ImgEditor} from './ImgEditor.js';
+import {modalHandler} from './util.js';
+import {imgEditor} from './imgEditor.js';
 
 const container = document.querySelector('.pictures');
-
-const ImgUpload = function () {
+const imgUpload = function () {
   const form = document.querySelector('#upload-select-image');
   const pristine = new Pristine(form);
-
-  ImgEditor.init();
-
+  imgEditor.init();
   form.onsubmit = function (evt) {
     const submitBtn = form.querySelector('#upload-submit');
-    const data = new FormData(form);
+    const formData = new FormData(form);
     const valid = pristine.validate();
-
     evt.preventDefault();
     if (!valid) {
       return false;
@@ -22,51 +18,50 @@ const ImgUpload = function () {
     submitBtn.disabled = true;
     fetch(UPLOAD_URL, {
       method: 'post',
-      body: data,
+      body: formData,
     })
       .then((resp) => {
         if (!resp.ok) {
           throw resp.status;
         }
-        ImgEditor.reset();
+        imgEditor.reset();
         form.reset();
-
-        ModalHandler.modal = {
+        pristine.destroy();
+        modalHandler.modal = {
           template: '#success',
           selector: '.success',
           container: container,
         };
-        ModalHandler.modalTitle = {
+        modalHandler.modalTitle = {
           selector: '.success__title',
           text: 'Изображение успешно загружено',
         };
-        ModalHandler.modalButton = {
+        modalHandler.modalButton = {
           show: true,
           selector: '.success__button',
           text: 'Круто!',
         };
       })
       .catch((err) => {
-        ModalHandler.modal = {
+        modalHandler.modal = {
           template: '#error',
           selector: '.error',
           container: container,
         };
-        ModalHandler.modalTitle = {
+        modalHandler.modalTitle = {
           selector: '.error__title',
           text: `${err} Ошибка загрузки файла`,
         };
-        ModalHandler.modalButton = {
+        modalHandler.modalButton = {
           show: true,
           selector: '.error__button',
           text: 'Попробовать ещё раз',
         };
       })
       .finally(() => {
-        ModalHandler.open();
+        modalHandler.open();
         submitBtn.disabled = false;
       });
   };
 };
-
-export {ImgUpload};
+export {imgUpload};

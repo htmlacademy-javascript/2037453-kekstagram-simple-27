@@ -1,6 +1,4 @@
-import {SENTENCES} from './settings.js';
-
-const ModalHandler = {
+const modalHandler = {
   target: null,
   modal: {
     template: null,
@@ -18,55 +16,35 @@ const ModalHandler = {
   },
   buttonText: null,
   open: () => {
-    const template = document.querySelector(ModalHandler.modal.template).content;
-    const container = ModalHandler.modal.container;
+    const template = document.querySelector(modalHandler.modal.template).content;
+    const container = modalHandler.modal.container;
     const Modal = template.cloneNode(true);
-    const ModalTitle = Modal.querySelector(ModalHandler.modalTitle.selector);
-    const ModalCancel = Modal.querySelector(ModalHandler.modalButton.selector);
-    ModalTitle.textContent = ModalHandler.modalTitle.text;
-    ModalCancel.textContent = ModalHandler.modalButton.text;
+    const ModalTitle = Modal.querySelector(modalHandler.modalTitle.selector);
+    const ModalCancel = Modal.querySelector(modalHandler.modalButton.selector);
+    ModalTitle.textContent = modalHandler.modalTitle.text;
+    ModalCancel.textContent = modalHandler.modalButton.text;
     container.appendChild(Modal);
-    ModalHandler.target = container.querySelector(ModalHandler.modal.selector);
-    if (!ModalHandler.modalButton.show) {
+    modalHandler.target = container.querySelector(modalHandler.modal.selector);
+    if (!modalHandler.modalButton.show) {
       ModalCancel.hidden = true;
       const timer = setTimeout(() => {
-        ModalHandler.target.remove();
+        modalHandler.target.remove();
         clearTimeout(timer);
       }, 3000);
     } else {
-      ModalCancel.addEventListener('click', ModalHandler.close);
-      window.addEventListener('keydown', ModalHandler.close);
+      ModalCancel.addEventListener('click', modalHandler.close);
+      window.addEventListener('keydown', modalHandler.close);
     }
     document.body.style.overflow = 'hidden';
   },
   close: (evt) => {
     if (!!evt && (evt.type === 'click' || evt.key === 'Escape')) {
-      const ErrorCancel = ModalHandler.target.querySelector(ModalHandler.modalButton.selector);
-      ErrorCancel.removeEventListener('click', ModalHandler.close);
-      window.removeEventListener('keydown', ModalHandler.close);
-      ModalHandler.target.remove();
+      const ErrorCancel = modalHandler.target.querySelector(modalHandler.modalButton.selector);
+      ErrorCancel.removeEventListener('click', modalHandler.close);
+      window.removeEventListener('keydown', modalHandler.close);
+      modalHandler.target.remove();
       document.body.style.overflow = 'auto';
     }
   },
 };
-
-const MaxLength = (str, max) => str.length <= max;
-
-const MyRandom = (min, max) => Math.floor(min + Math.random() * (max + 1 - min));
-
-const GenerateRandomDescription = () => {
-  const n = MyRandom(1, 4);
-  return Array
-    .from({length: n}, () => SENTENCES[MyRandom(0, SENTENCES.length - 1)])
-    .join(' ');
-};
-
-const GeneratePhotoDetails = (i) => ({
-  id: i,
-  url: `photos/photo${String(i).padStart(2, '0')}.jpg`,
-  description: GenerateRandomDescription(),
-  likes: MyRandom(15, 200),
-  comments: MyRandom(0, 200),
-});
-
-export {MaxLength, MyRandom, GenerateRandomDescription, GeneratePhotoDetails, ModalHandler};
+export {modalHandler};
