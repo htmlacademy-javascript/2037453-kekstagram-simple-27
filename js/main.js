@@ -1,5 +1,4 @@
-import {ImgDownload} from './ImgDownload.js';
-import {ImgUpload} from './ImgUpload.js';
-
-ImgDownload();
-ImgUpload();
+import {imgDownload} from './imgDownload.js';
+import {imgUpload} from './imgUpload.js';
+imgDownload();
+imgUpload();

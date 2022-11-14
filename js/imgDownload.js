@@ -1,11 +1,9 @@
-import {ThumbRender} from './thumbRender.js';
 import {DOWNLOAD_URL} from './settings.js';
-import {ModalHandler} from './util.js';
-
+import {modalHandler} from './util.js';
+import {thumbRender} from './thumbRender.js';
 const container = document.querySelector('.pictures');
 
-
-const ImgDownload = function () {
+const imgDownload = function () {
   fetch(DOWNLOAD_URL, {
     method: 'get'
   })
@@ -19,26 +17,25 @@ const ImgDownload = function () {
       const fragment = new DocumentFragment();
       const template = document.querySelector('#picture').content;
       resp.forEach((el) => {
-        fragment.appendChild(ThumbRender(template, el));
+        fragment.appendChild(thumbRender(template, el));
       });
       container.appendChild(fragment);
     })
     .catch((err) => {
-      ModalHandler.modal = {
+      modalHandler.modal = {
         template: '#error',
         selector: '.error',
         container: container,
       };
-      ModalHandler.modalTitle = {
+      modalHandler.modalTitle = {
         selector: '.error__title',
         text: `${err} Не удалось загрузить миниатюры`,
       };
-      ModalHandler.modalButton = {
+      modalHandler.modalButton = {
         show: false,
         selector: '.error__button',
       };
-      ModalHandler.open();
+      modalHandler.open();
     });
 };
-
-export {ImgDownload};
+export {imgDownload};
