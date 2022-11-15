@@ -1,7 +1,8 @@
 // Всем необходимым элементам добавил id,
 // потому что у меня бзик - классы для стилей, id (иногда data) для скриптов,
 // теги - зло :)
-import {IMG_PARAMS, FILE_TYPES} from './settings.js';
+import {FILE_TYPES, IMG_PARAMS} from './settings.js';
+
 const imgEditor = {
   imgScale: IMG_PARAMS.imgScale,
   imgScaleMin: IMG_PARAMS.imgScaleMin,
@@ -85,7 +86,7 @@ const imgEditor = {
     const file = imgEditor.fileUpload.files[0];
     const fileName = file.name.toLowerCase();
     const matches = FILE_TYPES.some((el) => fileName.endsWith(el));
-    if(matches) {
+    if (matches) {
       imgEditor.imgPreview.src = URL.createObjectURL(file);
       imgEditor.setImgScale();
       imgEditor.uploadCancel.addEventListener('click', imgEditor.hideImgEditor);
