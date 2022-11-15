@@ -11,7 +11,7 @@ const addImgPreviews = function (resp) {
     fragment.appendChild(thumbRender(template, el));
   });
   container.appendChild(fragment);
-}
+};
 
 const setErrorModal = function(err) {
   modalHandler.modal = {
@@ -27,7 +27,7 @@ const setErrorModal = function(err) {
     show: false,
     selector: '.error__button',
   };
-}
+};
 
 const imgDownload = function () {
   fetch(DOWNLOAD_URL, {
@@ -39,9 +39,7 @@ const imgDownload = function () {
       }
       return resp.json();
     })
-    .then((resp) => {
-      return addImgPreviews(resp);
-    })
+    .then((resp) => addImgPreviews(resp))
     .catch((err) => {
       setErrorModal(err);
       modalHandler.open();

@@ -19,7 +19,7 @@ const setSuccessModal = function() {
     selector: '.success__button',
     text: 'Круто!',
   };
-}
+};
 
 const setErrorModal = function(err) {
   modalHandler.modal = {
@@ -36,7 +36,7 @@ const setErrorModal = function(err) {
     selector: '.error__button',
     text: 'Попробовать ещё раз',
   };
-}
+};
 
 const imgUpload = function () {
   imgEditor.init();

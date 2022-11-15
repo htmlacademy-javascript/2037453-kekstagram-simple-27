@@ -5,7 +5,6 @@ const thumbRender = function (template, {
   description = 'Случайная фотография',
 }) {
   const newPost = template.cloneNode(true);
-  const newPostLink = newPost.querySelector('.picture');
   const newPostPicture = newPost.querySelector('.picture__img');
   newPostPicture.src = url;
   newPostPicture.alt = description;
