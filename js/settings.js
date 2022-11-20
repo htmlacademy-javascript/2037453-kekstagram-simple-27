@@ -1,5 +1,5 @@
 const DOWNLOAD_URL = 'https://27.javascript.pages.academy/kekstagram-simple/data';
-const UPLOAD_URL = 'https://27.javascript.pages.academy/kekstagram-simple1';
+const UPLOAD_URL = 'https://27.javascript.pages.academy/kekstagram-simple';
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 const IMG_PARAMS = {
   imgScale: 1,
