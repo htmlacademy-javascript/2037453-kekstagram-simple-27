@@ -13,7 +13,7 @@ const addImgPreviews = function (resp) {
   container.appendChild(fragment);
 };
 
-const setErrorModal = function(err) {
+const setErrorModal = function (err) {
   modalHandler.modal = {
     template: '#error',
     selector: '.error',

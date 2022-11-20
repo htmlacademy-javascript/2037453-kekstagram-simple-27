@@ -1,10 +1,10 @@
 import {UPLOAD_URL} from './settings.js';
-import {modalHandler} from './util.js';
+import {closeByEsc, modalHandler} from './util.js';
 import {imgEditor} from './imgEditor.js';
 
 const container = document.querySelector('.pictures');
 
-const setSuccessModal = function() {
+const setSuccessModal = function () {
   modalHandler.modal = {
     template: '#success',
     selector: '.success',
@@ -21,7 +21,7 @@ const setSuccessModal = function() {
   };
 };
 
-const setErrorModal = function(err) {
+const setErrorModal = function (err) {
   modalHandler.modal = {
     template: '#error',
     selector: '.error',
@@ -40,12 +40,10 @@ const setErrorModal = function(err) {
 
 const imgUpload = function () {
   imgEditor.init();
-  const form = document.querySelector('#upload-select-image');
-  const pristine = new Pristine(form);
-  form.onsubmit = function (evt) {
-    const submitBtn = form.querySelector('#upload-submit');
-    const formData = new FormData(form);
-    const valid = pristine.validate();
+  imgEditor.fileForm.onsubmit = function (evt) {
+    const submitBtn = imgEditor.fileForm.querySelector('#upload-submit');
+    const formData = new FormData(imgEditor.fileForm);
+    const valid = imgEditor.validator.validate();
     evt.preventDefault();
     if (!valid) {
       return false;
@@ -59,9 +57,7 @@ const imgUpload = function () {
         if (!resp.ok) {
           throw resp.status;
         }
-        imgEditor.reset();
-        form.reset();
-        pristine.destroy();
+        imgEditor.hideImgEditor();
         setSuccessModal();
       })
       .catch((err) => {
@@ -70,6 +66,7 @@ const imgUpload = function () {
       .finally(() => {
         submitBtn.disabled = false;
         modalHandler.open();
+        closeByEsc(modalHandler.close);
       });
   };
 };

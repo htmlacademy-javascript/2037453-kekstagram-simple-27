@@ -25,26 +25,31 @@ const modalHandler = {
     modalCancel.textContent = modalHandler.modalButton.text;
     container.appendChild(modal);
     modalHandler.target = container.querySelector(modalHandler.modal.selector);
-    if (!modalHandler.modalButton.show) {
+    if (modalHandler.modalButton.show) {
+      modalCancel.addEventListener('click', modalHandler.close, {once: true});
+    } else {
       modalCancel.hidden = true;
       const timer = setTimeout(() => {
         modalHandler.target.remove();
         clearTimeout(timer);
       }, 3000);
-    } else {
-      modalCancel.addEventListener('click', modalHandler.close);
-      window.addEventListener('keydown', modalHandler.close);
     }
     document.body.style.overflow = 'hidden';
   },
-  close: (evt) => {
-    if (!!evt && (evt.type === 'click' || evt.key === 'Escape')) {
-      const ErrorCancel = modalHandler.target.querySelector(modalHandler.modalButton.selector);
-      ErrorCancel.removeEventListener('click', modalHandler.close);
-      window.removeEventListener('keydown', modalHandler.close);
-      modalHandler.target.remove();
-      document.body.style.overflow = 'auto';
-    }
+  close: () => {
+    modalHandler.target.remove();
+    document.body.style.overflow = 'auto';
   },
 };
-export {modalHandler};
+// Вынес слушателя нажатия Esc на windows в отдельную функцию, с вызовом callback для дальнейших действий.
+const closeByEsc = function (cb) {
+  const _close = function (evt) {
+    if (evt.key === 'Escape') {
+      window.removeEventListener('keydown', _close);
+      cb();
+    }
+  };
+  window.addEventListener('keydown', _close);
+};
+
+export {modalHandler, closeByEsc};

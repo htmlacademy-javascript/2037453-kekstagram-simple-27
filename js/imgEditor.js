@@ -1,7 +1,9 @@
-// Всем необходимым элементам добавил id,
-// потому что у меня бзик - классы для стилей, id (иногда data) для скриптов,
-// теги - зло :)
+/*
+* Pristine - плагин кастомизации валидации формы
+* noUiSlider - плагин кастомизации range
+* */
 import {FILE_TYPES, IMG_PARAMS} from './settings.js';
+import {closeByEsc} from './util.js';
 
 const imgEditor = {
   imgScale: IMG_PARAMS.imgScale,
@@ -20,13 +22,7 @@ const imgEditor = {
     this.imgScaleHandler = this.fileForm.querySelector('#img-scale');
     this.imgScaleValue = this.imgScaleHandler.querySelector('#img-scale-value');
     this.fileUpload.addEventListener('change', this.showImgEditor);
-  },
-  reset() {
-    this.imgEditor.classList.add('hidden');
-    imgEditor.imgPreview.src = 'img/upload-default-image.jpg';
-    this.resetImgChanges();
-    this.uploadCancel.removeEventListener('click', imgEditor.hideImgEditor);
-    window.removeEventListener('keyup', imgEditor.hideImgEditor);
+    this.validator = new Pristine(this.fileForm);
   },
   setImgScale(evt) {
     if (evt?.target.classList.contains('scale__control--smaller')) {
@@ -58,7 +54,6 @@ const imgEditor = {
         imgEditor.imgPreview.style.filter = `${imgEditor.currentImgEffect.name}(${val[0]}${imgEditor.currentImgEffect.unit})`;
       });
       imgEditor.imgAddEffectHandler.on('change', (val) => {
-        // Превращаем true/false в 1/0
         const fractionalSize = Number(Number.isInteger(imgEditor.currentImgEffect.step));
         imgEditor.imgEffectValue.value = Number(val).toFixed(fractionalSize);
       });
@@ -68,7 +63,6 @@ const imgEditor = {
     this.imgEffectValue.value = '';
     this.imgPreview.removeAttribute('class');
     this.imgPreview.style.filter = null;
-    // Если применен плагин - сносим.
     if (this.imgAddEffectHandler) {
       this.imgAddEffectHandler.destroy();
     }
@@ -81,8 +75,6 @@ const imgEditor = {
     this.clearImgEffect();
   },
   showImgEditor() {
-    // Пока не придумал, как обойти потерю окружения,
-    // при этом сохранить оригинал функции, а не копию, которую дает bind.
     const file = imgEditor.fileUpload.files[0];
     const fileName = file.name.toLowerCase();
     const matches = FILE_TYPES.some((el) => fileName.endsWith(el));
@@ -93,14 +85,16 @@ const imgEditor = {
       imgEditor.imgAddEffect.addEventListener('change', imgEditor.setImgEffect);
       imgEditor.imgScaleHandler.addEventListener('click', imgEditor.setImgScale);
       imgEditor.imgEditor.classList.remove('hidden');
-      window.addEventListener('keyup', imgEditor.hideImgEditor);
+      closeByEsc(imgEditor.hideImgEditor);
     }
   },
-  hideImgEditor(evt) {
-    // Хоть я и придерживаюсь числового кода нажатых клавиш
-    if (evt?.key === 'Escape' || evt?.type === 'click') {
-      imgEditor.reset();
-    }
+  hideImgEditor() {
+    imgEditor.imgEditor.classList.add('hidden');
+    imgEditor.imgPreview.src = 'img/upload-default-image.jpg';
+    imgEditor.resetImgChanges();
+    imgEditor.uploadCancel.removeEventListener('click', imgEditor.hideImgEditor);
+    imgEditor.fileForm.reset();
+    imgEditor.validator.reset();
   },
 };
 export {imgEditor};
