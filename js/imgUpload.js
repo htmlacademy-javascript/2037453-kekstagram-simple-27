@@ -1,16 +1,49 @@
 import {UPLOAD_URL} from './settings.js';
-import {modalHandler} from './util.js';
+import {closeByEsc, modalHandler} from './util.js';
 import {imgEditor} from './imgEditor.js';
 
 const container = document.querySelector('.pictures');
+
+const setSuccessModal = function () {
+  modalHandler.modal = {
+    template: '#success',
+    selector: '.success',
+    container: container,
+  };
+  modalHandler.modalTitle = {
+    selector: '.success__title',
+    text: 'Изображение успешно загружено',
+  };
+  modalHandler.modalButton = {
+    show: true,
+    selector: '.success__button',
+    text: 'Круто!',
+  };
+};
+
+const setErrorModal = function (err) {
+  modalHandler.modal = {
+    template: '#error',
+    selector: '.error',
+    container: container,
+  };
+  modalHandler.modalTitle = {
+    selector: '.error__title',
+    text: `${err} Ошибка загрузки файла`,
+  };
+  modalHandler.modalButton = {
+    show: true,
+    selector: '.error__button',
+    text: 'Попробовать ещё раз',
+  };
+};
+
 const imgUpload = function () {
-  const form = document.querySelector('#upload-select-image');
-  const pristine = new Pristine(form);
   imgEditor.init();
-  form.onsubmit = function (evt) {
-    const submitBtn = form.querySelector('#upload-submit');
-    const formData = new FormData(form);
-    const valid = pristine.validate();
+  imgEditor.fileForm.onsubmit = function (evt) {
+    const submitBtn = imgEditor.fileForm.querySelector('#upload-submit');
+    const formData = new FormData(imgEditor.fileForm);
+    const valid = imgEditor.validator.validate();
     evt.preventDefault();
     if (!valid) {
       return false;
@@ -24,43 +57,16 @@ const imgUpload = function () {
         if (!resp.ok) {
           throw resp.status;
         }
-        imgEditor.reset();
-        form.reset();
-        pristine.destroy();
-        modalHandler.modal = {
-          template: '#success',
-          selector: '.success',
-          container: container,
-        };
-        modalHandler.modalTitle = {
-          selector: '.success__title',
-          text: 'Изображение успешно загружено',
-        };
-        modalHandler.modalButton = {
-          show: true,
-          selector: '.success__button',
-          text: 'Круто!',
-        };
+        imgEditor.hideImgEditor();
+        setSuccessModal();
       })
       .catch((err) => {
-        modalHandler.modal = {
-          template: '#error',
-          selector: '.error',
-          container: container,
-        };
-        modalHandler.modalTitle = {
-          selector: '.error__title',
-          text: `${err} Ошибка загрузки файла`,
-        };
-        modalHandler.modalButton = {
-          show: true,
-          selector: '.error__button',
-          text: 'Попробовать ещё раз',
-        };
+        setErrorModal(err);
       })
       .finally(() => {
-        modalHandler.open();
         submitBtn.disabled = false;
+        modalHandler.open();
+        closeByEsc(modalHandler.close);
       });
   };
 };
